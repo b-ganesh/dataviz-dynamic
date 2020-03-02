@@ -12,7 +12,7 @@
 
 import * as d3 from 'd3'
 
-var data_source = './data/state_laws_2014.geojson'
+var data_source = 'https://b-ganesh.github.io/dataviz-dynamic/data/state_laws_2014.geojson'
 d3.json(
     data_source).then(
     function(json) {
