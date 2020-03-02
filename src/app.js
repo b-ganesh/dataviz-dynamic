@@ -16,8 +16,8 @@ var data_source = 'https://b-ganesh.github.io/dataviz-dynamic/data/state_laws_20
 d3.json(
     data_source).then(
     function(json) {
+      const height = 500;
       const width = 1020;
-      const height = 500;
       const margin = {
         top: 10,
         left: 10,
