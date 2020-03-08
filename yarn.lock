@@ -3670,6 +3670,11 @@ interpret@1.2.0:
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.2.0.tgz#d5061a6224be58e8083985f5014d844359576296"
   integrity sha512-mT34yGKMNceBQUoVn7iCDKDntA7SC6gycMAWzGx1z/CMCTV7b2AAtXlo3nRyHZ1FelRkQbQjprHSYGwzLtkVbw==
 
+intersection-observer@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/intersection-observer/-/intersection-observer-0.7.0.tgz#ee16bee978db53516ead2f0a8154b09b400bbdc9"
+  integrity sha512-Id0Fij0HsB/vKWGeBe9PxeY45ttRiBmhFyyt/geBdDHBYNctMRTE3dC1U3ujzz3lap+hVXlEcVaB56kZP/eEUg==
+
 invariant@^2.2.2:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
@@ -5925,6 +5930,11 @@ schema-utils@^1.0.0:
     ajv "^6.1.0"
     ajv-errors "^1.0.0"
     ajv-keywords "^3.1.0"
+
+scrollama@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/scrollama/-/scrollama-2.2.0.tgz#c2bdbca1427244d204892777ba1657b610a5f9d3"
+  integrity sha512-5ff3eQ9fA1JV5+Nzdtm6yB5v9uoynwZ3HbX8rfAj4pBQ5iQGBr6AX0ZUm9v5PtqOZVBw3FJpWS2OvmGWfUPdQw==
 
 select-hose@^2.0.0:
   version "2.0.0"
