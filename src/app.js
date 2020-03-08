@@ -51,7 +51,7 @@ function handleStepEnter(response) {
   });
 
   // update graphic based on step
-  figure.select("p").text(response.index + 1);
+  // figure.select("p").text(response.index + 1);
   if (response.index === 0) {
     // console.log(myd1);
     chloro_map(myd1, myd2);
@@ -88,31 +88,9 @@ function init() {
 }
 
 
-
-// kick things off
-// init();
-
-// chloro_map()
-
-
-// fetch('./data/state_laws_2014.geojson')
-//     .then(response => response.json())
-//     .then(data => {
-//       // kick things off
-//       myd = data;
-//       init();
-//       setupviz();
-//     })
-//     .catch(e => {
-//       console.log(e);
-      
-//     });
-
-    
-
 Promise.all([
   './data/state_laws_2014.geojson',
-  './data/clean_trafficking_data_coords.json'
+  './data/clean_trafficking_data_coords2.json'
   ].map(url => fetch(url).then(response => response.json())))
   .then(result => {
     const [data1, data2] = result;

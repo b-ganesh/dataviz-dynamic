@@ -42,7 +42,7 @@ figure {
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
-  background-color: #8a8a8a;
+  background-color:none;
   z-index: 0;
 }
 
@@ -80,3 +80,15 @@ figure p {
   padding: 1rem;
   font-size: 1.5rem;
 }
+
+.trip-arc {
+  fill: none;
+  stroke: coral;
+  stroke-opacity: 0;
+  }
+  
+.trip:hover .trip-arc {
+  stroke-opacity: 0.5;
+}
+
+  
