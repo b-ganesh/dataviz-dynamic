@@ -90,7 +90,7 @@ function init() {
 
 Promise.all([
   './data/state_laws_2014.geojson',
-  './data/clean_trafficking_data_coords2.json'
+  './data/clean_trafficking_data_coords.json'
   ].map(url => fetch(url).then(response => response.json())))
   .then(result => {
     const [data1, data2] = result;

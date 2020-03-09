@@ -5,6 +5,8 @@ export default function chloro_map(data1, data2, error) {
 
     if (error) throw error;
 
+    console.log(data2)
+
 const height = 500;
 const width = 1070;
 const margin = {
@@ -61,7 +63,7 @@ var voronoi = d3.voronoi()
                 .append("circle")
                 .attr("r",5)
                 .attr("transform", function(d) {return "translate(" + projection([d.properties['long'],d.properties['lat']]) + ")";});    
-
+    
 
     const processedData = Object.keys(data2.origin).map((_, idx) => {
         return {
@@ -75,6 +77,7 @@ var voronoi = d3.voronoi()
         };
       })
 
+
     var trip = svg.selectAll(".trip")
     .data(processedData)
     .enter()
@@ -86,17 +89,15 @@ var voronoi = d3.voronoi()
     .attr('d', function(d) { return path({type: "LineString", coordinates: [[d.origin_long, d.origin_lat], [d.destination_long, d.destination_lat]]}) });
 
 
-    // const smallerData = processedData.map(d => ({coords: [d.origin_long, d.origin_lat]}));
-    // console.log(smallerData)
-    // const projectedData = smallerData.map(projection)
-    // console.log(projectedData)
-    // const voronois = voronoi.polygons(smallerData)
-    // console.log(voronois)
+    const smallerData = processedData.map(d => ({coords: [d.origin_long, d.origin_lat]}));
+    console.log(smallerData)
+    const voronois = voronoi(smallerData)
+    console.log(voronois)
 
-    // trip.append("path")
-    //   .data(voronoi.polygons(processedData.map(d => ({long: d.origin_long, lat: d.origin_lat})).map(projection)))
-    //   .attr("class", "trip-cell")
-    //   .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; });
+    trip.append("path")
+      .data(voronois)
+      .attr("class", "trip-cell")
+      .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; });
 
     
         };
