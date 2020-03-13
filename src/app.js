@@ -3,17 +3,18 @@
 // domReady(() => {
 //   // this is just one example of how to import data. there are lots of ways to do it!
 
-import * as d3 from 'd3'
-import chloro_map from './map'
-import scrollama from 'scrollama'
-import './stylesheets/main.css'
-import setupviz from './setupviz'
+import * as d3 from "d3";
+import chloro_map from "./map";
+import scrollama from "scrollama";
+import "./stylesheets/main.css";
+import setupviz from "./setupviz";
 
 // var main = d3.select("main");
 var scrolly = d3.select("#scrolly");
 var figure = scrolly.select("figure");
 var article = scrolly.select("article");
 var step = article.selectAll(".step");
+// AM: this type of variable hoising to global is a bad practice, just pass variables where they are needed
 var myd1;
 var myd2;
 // var myd;
@@ -55,9 +56,8 @@ function handleStepEnter(response) {
   if (response.index === 0) {
     // console.log(myd1);
     chloro_map(myd1, myd2);
-  } 
+  }
   handleResize();
-
 }
 
 function setupStickyfill() {
@@ -87,15 +87,23 @@ function init() {
   window.addEventListener("resize", handleResize);
 }
 
-
-Promise.all([
-  './data/state_laws_2014.geojson',
-  './data/clean_trafficking_data_coords.json'
-  ].map(url => fetch(url).then(response => response.json())))
+Promise.all(
+  [
+    "./data/state_laws_2014.geojson",
+    "./data/clean_trafficking_data_coords.json"
+  ].map(url => fetch(url).then(response => response.json()))
+)
   .then(result => {
     const [data1, data2] = result;
     myd1 = data1;
-    myd2 = data2;
+    // AM: this is just a more general version of your processed data on the other page
+    myd2 = [...new Array(Object.keys(data2.origin).length)].map((_, idx) => {
+      return Object.keys(data2).reduce((acc, key) => {
+        acc[key] = data2[key][idx];
+        return acc;
+      }, {});
+    });
+    console.log(myd2);
     init();
     setupviz();
   })
