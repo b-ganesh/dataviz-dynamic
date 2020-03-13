@@ -1,5 +1,13 @@
 import * as d3 from "d3";
 
+function groupBy(data, accessor) {
+  return data.reduce((acc, row) => {
+    const key = accessor(row);
+    acc[key] = (acc[key] || []).concat(row);
+    return acc;
+  }, {});
+}
+
 export default function chloro_map(data1, data2, error) {
   if (error) throw error;
 
@@ -7,12 +15,7 @@ export default function chloro_map(data1, data2, error) {
 
   const height = 500;
   const width = 1070;
-  const margin = {
-    top: 10,
-    left: 10,
-    right: 20,
-    bottom: 20
-  };
+  const margin = { top: 10, left: 10, right: 20, bottom: 20 };
 
   var svg = d3.select("#mymap").select("svg");
 
@@ -72,21 +75,9 @@ export default function chloro_map(data1, data2, error) {
   //     );
   //   });
 
-  const processedData = Object.keys(data2.origin).map((_, idx) => {
-    return {
-      origin: data2.origin[idx],
-      destination: data2.destination[idx],
-      value: data2.value[idx],
-      origin_long: data2.origin_long[idx],
-      origin_lat: data2.origin_lat[idx],
-      destination_long: data2.destination_long[idx],
-      destination_lat: data2.destination_lat[idx]
-    };
-  });
-
   var trip = svg
     .selectAll(".trip")
-    .data(processedData)
+    .data(data2)
     .enter()
     .append("g")
     .attr("class", "trip");
@@ -104,17 +95,12 @@ export default function chloro_map(data1, data2, error) {
       });
     });
 
-  const smallerData = processedData.map(d => ({
-    coords: [d.origin_long, d.origin_lat]
-  }));
-  console.log(smallerData);
-  const projected = smallerData.map(d => {
-    console.log(d, projection(d.coords));
-    return projection(d.coords);
-  });
-  console.log(projected);
+  const smallerData = data2.map(d => [d.origin_long, d.origin_lat]);
+  // console.log(smallerData);
+  const projected = smallerData.map(d => projection(d));
+  // console.log(projected);
   const voronois = voronoi.polygons(projected);
-  console.log(voronois);
+  // console.log(voronois);
 
   trip
     .append("path")
@@ -126,13 +112,6 @@ export default function chloro_map(data1, data2, error) {
       return d ? "M" + d.join("L") + "Z" : null;
     });
 
-  function groupBy(data2, accessor) {
-    return data2.reduce((acc, row) => {
-      const key = accessor(row);
-      acc[key] = (acc[key] || []).concat(row);
-      return acc;
-    }, {});
-  }
   const grouped = Object.values(groupBy(data2, d => d.origin));
   console.log(grouped);
 }
