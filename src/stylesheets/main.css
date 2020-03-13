@@ -1,11 +1,10 @@
-
 a {
   cursor: pointer;
 }
 
 html,
 body {
-  background: #D6D6CE;
+  background: #d6d6ce;
   font-family: Verdana, Geneva, sans-serif;
   height: 100%;
   margin: 0;
@@ -42,7 +41,7 @@ figure {
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
-  background-color:none;
+  background-color: none;
   z-index: 0;
 }
 
@@ -85,10 +84,8 @@ figure p {
   fill: none;
   stroke: coral;
   stroke-opacity: 0;
-  }
-  
+}
+
 .trip:hover .trip-arc {
   stroke-opacity: 0.5;
 }
-
-  
