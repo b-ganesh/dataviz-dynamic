@@ -1,4 +1,4 @@
-import * as d3 from "d3";
+import * as d3 from 'd3';
 
 function groupBy(data, accessor) {
   return data.reduce((acc, row) => {
@@ -15,9 +15,9 @@ export default function chloro_map(data1, data2, error) {
 
   const height = 500;
   const width = 1070;
-  const margin = { top: 10, left: 10, right: 20, bottom: 20 };
+  const margin = {top: 10, left: 10, right: 20, bottom: 20};
 
-  var svg = d3.select("#mymap").select("svg");
+  var svg = d3.select('#mymap').select('svg');
 
   var projection = d3.geoAlbersUsa();
 
@@ -28,38 +28,37 @@ export default function chloro_map(data1, data2, error) {
     .domain([20, 40, 60, 80, 100, 120, 140, 160])
     .range(d3.schemeGreens[7]);
 
-  var voronoi = d3.voronoi().extent([
-    [-1, -1],
-    [width + 1, height + 1]
-  ]);
+  // var voronoi = d3.voronoi().extent([
+  //   [-1, -1],
+  //   [width + 1, height + 1]
+  // ]);
   svg
-    .selectAll("path")
+    .selectAll('path')
     .data(data1.features)
     .enter()
-    .append("path")
-    .attr("stroke", "black")
-    .attr("fill", function(d) {
-      return color((d.total = d.properties["lawtotal"]));
+    .append('path')
+    .attr('stroke', 'black')
+    .attr('fill', function(d) {
+      return color((d.total = d.properties['lawtotal']));
     })
-    .attr("d", path);
-
+    .attr('d', path);
   svg
-    .append("text")
-    .text("Tracking Gun Trafficking in America")
-    .attr("transform", `translate(${margin.left}, ${30})`)
-    .attr("font-weight", "bolder")
-    .attr("font-size", 30);
+    .append('text')
+    .text('Tracking Gun Trafficking in America')
+    .attr('transform', `translate(${margin.left}, ${30})`)
+    .attr('font-weight', 'bolder')
+    .attr('font-size', 30);
   svg
-    .append("text")
-    .text("Movement of guns across the U.S., 2015")
-    .attr("transform", `translate(${margin.left}, ${60})`)
-    .attr("font-weight", "bold")
-    .attr("font-size", 18);
+    .append('text')
+    .text('Movement of guns across the U.S., 2015')
+    .attr('transform', `translate(${margin.left}, ${60})`)
+    .attr('font-weight', 'bold')
+    .attr('font-size', 18);
   svg
-    .append("text")
-    .text("Data source: FBI NICS Data")
-    .attr("transform", `translate(${margin.left}, ${80})`)
-    .attr("font-size", 12);
+    .append('text')
+    .text('Data source: FBI NICS Data')
+    .attr('transform', `translate(${margin.left}, ${80})`)
+    .attr('font-size', 12);
 
   // svg
   //   .selectAll("circle")
@@ -74,65 +73,65 @@ export default function chloro_map(data1, data2, error) {
   //       ")"
   //     );
   //   });
-
   const grouped = Object.values(groupBy(data2, d => d.origin));
-  console.log(grouped);
+  const statePositions = grouped.reduce((acc, row) => {
+    row.forEach(d => {
+      acc[d.destination] = [d.destination_lat, d.destination_long];
+    });
+    return acc;
+  }, {});
+  const stateShapes = data1.features.reduce((acc, row) => {
+    if (!row.properties.state) {
+      return acc;
+      // console.log(row.properties);
+    }
+    // console.log(row.properties.state);
+    acc[row.properties.state.toLowerCase()] = row;
+    return acc;
+  }, {});
 
   var trip1 = svg
-    .selectAll(".trip")
+    .selectAll('.trip')
     .data(grouped)
     .enter()
-    .append("g")
-    .attr("class", "trip");
+    .append('g')
+    .attr('class', 'trip');
+  // hover targets
+  trip1
+    .selectAll('path')
+    .data(d => [d[0]].map(row => stateShapes[row.origin.toLowerCase()]).filter(d => d))
+    .enter()
+    .append('path')
+    .attr('stroke', 'black')
+    .attr('fill', d => 'red')
+    .attr('fill-opacity', 0)
+    .attr('d', path);
 
   trip1
-    .append("path")
-    .attr("class", "trip-arc1")
-    .attr("d", function(d) {
-      return path({
-        type: "LineString",
-        coordinates: [
-          [d[0].origin_long, d[0].origin_lat],
-          [d[0].destination_long, d[0].destination_lat]
-        ]
-      });
-    });
-
-  var trip2 = svg
-    .selectAll(".trip2")
-    .data(grouped)
+    .selectAll('.trip-arc1')
+    .data(d => d.filter(el => statePositions[el.origin] && el.origin !== el.destination && el.value))
     .enter()
-    .append("g")
-    .attr("class", "trip2");
-
-  trip2
-    .append("path")
-    .attr("class", "trip-arc2")
-    .attr("d", function(d) {
-      return path({
-        type: "LineString",
-        coordinates: [
-          [d[1].origin_long, d[1].origin_lat],
-          [d[1].destination_long, d[1].destination_lat]
-        ]
-      });
-    });
-
-  const smallerData = data2.map(d => [d.origin_long, d.origin_lat]);
-  // console.log(smallerData);
-  const projected = smallerData.map(d => projection(d));
-  // console.log(projected);
-  const voronois = voronoi.polygons(projected);
-  // console.log(voronois);
-
-  trip
-    .append("path")
-    .data(voronois)
-    .attr("class", "trip-cell")
-    .attr("fill", "black")
-    .attr("fill-opacity", 0)
-    .attr("d", function(d) {
-      return d ? "M" + d.join("L") + "Z" : null;
+    .append('path')
+    .attr('class', 'trip-arc1')
+    .attr('fill', 'none')
+    .attr('stroke', 'black')
+    .attr('d', function(d) {
+      console.log(d);
+      const geoLine = {
+        type: 'LineString',
+        coordinates: [statePositions[d.origin], statePositions[d.destination]],
+      };
+      // AM: left off here
+      // if (!statePositions[d.origin]) {
+      //   console.log(d.origin);
+      // }
+      // if (!statePositions[d.destination]) {
+      //   console.log(d.destination);
+      // }
+      // [d[0].destination_long, d[0].destination_lat]
+      // [d[0].origin_long, d[0].origin_lat],
+      // console.log("ugh", d, geoLine);
+      return path(geoLine);
     });
 }
 
