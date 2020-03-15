@@ -86,6 +86,16 @@ figure p {
   stroke-opacity: 0;
 }
 
-.trip:hover .trip-arc {
+.trip .trip-arc {
+  stroke-opacity: 0.5;
+}
+
+.trip-arc2 {
+  fill: none;
+  stroke: coral;
+  stroke-opacity: 0;
+}
+
+.trip2 .trip-arc2 {
   stroke-opacity: 0.5;
 }

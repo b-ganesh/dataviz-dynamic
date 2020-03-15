@@ -75,22 +75,45 @@ export default function chloro_map(data1, data2, error) {
   //     );
   //   });
 
-  var trip = svg
+  const grouped = Object.values(groupBy(data2, d => d.origin));
+  console.log(grouped);
+
+  var trip1 = svg
     .selectAll(".trip")
-    .data(data2)
+    .data(grouped)
     .enter()
     .append("g")
     .attr("class", "trip");
 
-  trip
+  trip1
     .append("path")
-    .attr("class", "trip-arc")
+    .attr("class", "trip-arc1")
     .attr("d", function(d) {
       return path({
         type: "LineString",
         coordinates: [
-          [d.origin_long, d.origin_lat],
-          [d.destination_long, d.destination_lat]
+          [d[0].origin_long, d[0].origin_lat],
+          [d[0].destination_long, d[0].destination_lat]
+        ]
+      });
+    });
+
+  var trip2 = svg
+    .selectAll(".trip2")
+    .data(grouped)
+    .enter()
+    .append("g")
+    .attr("class", "trip2");
+
+  trip2
+    .append("path")
+    .attr("class", "trip-arc2")
+    .attr("d", function(d) {
+      return path({
+        type: "LineString",
+        coordinates: [
+          [d[1].origin_long, d[1].origin_lat],
+          [d[1].destination_long, d[1].destination_lat]
         ]
       });
     });
@@ -111,9 +134,6 @@ export default function chloro_map(data1, data2, error) {
     .attr("d", function(d) {
       return d ? "M" + d.join("L") + "Z" : null;
     });
-
-  const grouped = Object.values(groupBy(data2, d => d.origin));
-  console.log(grouped);
 }
 
 // take all the lines and make sure i seperately assign lines for each starting point
