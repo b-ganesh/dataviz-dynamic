@@ -82,20 +82,15 @@ figure p {
 
 .trip-arc {
   fill: none;
-  stroke: coral;
+  /* stroke: coral; */
   stroke-opacity: 0;
 }
 
-.trip .trip-arc {
+.trip:hover .trip-arc {
   stroke-opacity: 0.5;
 }
 
-.trip-arc2 {
-  fill: none;
-  stroke: coral;
-  stroke-opacity: 0;
-}
-
-.trip2 .trip-arc2 {
-  stroke-opacity: 0.5;
+.trip:hover .state-shape {
+  stroke: black;
+  stroke-width: 4px;
 }

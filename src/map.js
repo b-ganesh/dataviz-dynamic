@@ -11,11 +11,9 @@ function groupBy(data, accessor) {
 export default function chloro_map(data1, data2, error) {
   if (error) throw error;
 
-  console.log(data2);
-
-  const height = 500;
+  const height = 600;
   const width = 1070;
-  const margin = {top: 10, left: 10, right: 20, bottom: 20};
+  const margin = {top: 200, left: 200, right: 200, bottom: 200};
 
   var svg = d3.select('#mymap').select('svg');
 
@@ -28,10 +26,6 @@ export default function chloro_map(data1, data2, error) {
     .domain([20, 40, 60, 80, 100, 120, 140, 160])
     .range(d3.schemeGreens[7]);
 
-  // var voronoi = d3.voronoi().extent([
-  //   [-1, -1],
-  //   [width + 1, height + 1]
-  // ]);
   svg
     .selectAll('path')
     .data(data1.features)
@@ -42,23 +36,40 @@ export default function chloro_map(data1, data2, error) {
       return color((d.total = d.properties['lawtotal']));
     })
     .attr('d', path);
+
   svg
     .append('text')
     .text('Tracking Gun Trafficking in America')
-    .attr('transform', `translate(${margin.left}, ${30})`)
+    .attr('transform', `translate(${margin.left}, ${18})`)
     .attr('font-weight', 'bolder')
-    .attr('font-size', 30);
+    .attr('font-size', 25);
   svg
     .append('text')
     .text('Movement of guns across the U.S., 2015')
-    .attr('transform', `translate(${margin.left}, ${60})`)
+    .attr('transform', `translate(${margin.top}, ${40})`)
     .attr('font-weight', 'bold')
-    .attr('font-size', 18);
+    .attr('font-size', 14);
   svg
     .append('text')
     .text('Data source: FBI NICS Data')
-    .attr('transform', `translate(${margin.left}, ${80})`)
+    .attr('transform', `translate(${margin.bottom}, ${600})`)
     .attr('font-size', 12);
+
+  var svg = d3.select('svg');
+
+  svg
+    .append('g')
+    .attr('class', 'legendQuant')
+    .attr('transform', 'translate(20,20)');
+
+  var legend = d3
+    .legendColor()
+    .labelFormat(d3.format('.2f'))
+    .labels(d3.legendHelpers.thresholdLabels)
+    .useClass(true)
+    .scale(thresholdScale);
+
+  svg.select('.legendQuant').call(legend);
 
   // svg
   //   .selectAll("circle")
@@ -83,57 +94,147 @@ export default function chloro_map(data1, data2, error) {
   const stateShapes = data1.features.reduce((acc, row) => {
     if (!row.properties.state) {
       return acc;
-      // console.log(row.properties);
     }
-    // console.log(row.properties.state);
     acc[row.properties.state.toLowerCase()] = row;
     return acc;
   }, {});
 
-  var trip1 = svg
+  var trip = svg
     .selectAll('.trip')
     .data(grouped)
     .enter()
     .append('g')
     .attr('class', 'trip');
   // hover targets
-  trip1
+  trip
     .selectAll('path')
     .data(d => [d[0]].map(row => stateShapes[row.origin.toLowerCase()]).filter(d => d))
     .enter()
     .append('path')
     .attr('stroke', 'black')
-    .attr('fill', d => 'red')
+    // .attr('fill', d => 'red')
     .attr('fill-opacity', 0)
+    .attr('class', 'state-shape')
     .attr('d', path);
 
-  trip1
-    .selectAll('.trip-arc1')
+  trip
+    .selectAll('.trip-arc')
     .data(d => d.filter(el => statePositions[el.origin] && el.origin !== el.destination && el.value))
     .enter()
     .append('path')
-    .attr('class', 'trip-arc1')
-    .attr('fill', 'none')
-    .attr('stroke', 'black')
+    .attr('class', 'trip-arc')
     .attr('d', function(d) {
-      console.log(d);
       const geoLine = {
         type: 'LineString',
-        coordinates: [statePositions[d.origin], statePositions[d.destination]],
+        coordinates: [
+          [statePositions[d.origin][1], statePositions[d.origin][0]],
+          [statePositions[d.destination][1], statePositions[d.destination][0]],
+        ],
       };
-      // AM: left off here
-      // if (!statePositions[d.origin]) {
-      //   console.log(d.origin);
-      // }
-      // if (!statePositions[d.destination]) {
-      //   console.log(d.destination);
-      // }
-      // [d[0].destination_long, d[0].destination_lat]
-      // [d[0].origin_long, d[0].origin_lat],
-      // console.log("ugh", d, geoLine);
       return path(geoLine);
+    })
+    .attr('stroke', d => {
+      // console.log(d.origin === 'ALASKA');
+      return ((d.origin === 'ALABAMA') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'ALABAMA') & (d.destination === 'GEORGIA')) |
+        ((d.origin === 'ALASKA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'ARIZONA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'ARKANSAS') & (d.destination === 'TENNESSEE')) |
+        ((d.origin === 'CALIFORNIA') & (d.destination === 'ARIZONA')) |
+        ((d.origin === 'COLORADO') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'CONNECTICUT') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'CONNECTICUT') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'DELAWARE') & (d.destination === 'MARYLAND')) |
+        ((d.origin === 'FLORIDA') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'GEORGIA') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'IDAHO') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'ILLINOIS') & (d.destination === 'MISSOURI')) |
+        ((d.origin === 'INDIANA') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'IOWA') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'KANSAS') & (d.destination === 'MISSOURI')) |
+        ((d.origin === 'KENTUCKY') & (d.destination === 'OHIO')) |
+        ((d.origin === 'LOUISIANA') & (d.destination === 'TEXAS')) |
+        ((d.origin === 'MAINE') & (d.destination === 'MASSACHUSETTS')) |
+        ((d.origin === 'MICHIGAN') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'MINNESOTA') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'MISSISSIPPI') & (d.destination === 'TENNESSEE')) |
+        ((d.origin === 'MISSOURI') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'MONTANA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'NEVADA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'NEW HAMPSHIRE') & (d.destination === 'MASSACHUSETTS')) |
+        ((d.origin === 'NEW JERSEY') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'NEW MEXICO') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'NEW YORK') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'NORTH CAROLINA') & (d.destination === 'SOUTH CAROLINA')) |
+        ((d.origin === 'OHIO') & (d.destination === 'MICHIGAN')) |
+        ((d.origin === 'OKLAHOMA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'OREGON') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'PENNSYLVANIA') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'SOUTH CAROLINA') & (d.destination === 'NORTH CAROLINA')) |
+        ((d.origin === 'TENNESSEE') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'TEXAS') & (d.destination === 'LOUISIANA')) |
+        ((d.origin === 'UTAH') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'VERMONT') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'VIRGINIA') & (d.destination === 'MARYLAND')) |
+        ((d.origin === 'WASHINGTON') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'WEST VIRGINIA') & (d.destination === 'MARYLAND')) |
+        ((d.origin === 'WISCONSIN') & (d.destination === 'ILLINOIS'))
+        ? 'red'
+        : 'gray';
+    })
+    .attr('stroke-width', d => {
+      // console.log(d.origin === 'ALASKA');
+      return ((d.origin === 'ALABAMA') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'ALABAMA') & (d.destination === 'GEORGIA')) |
+        ((d.origin === 'ALASKA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'ARIZONA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'ARKANSAS') & (d.destination === 'TENNESSEE')) |
+        ((d.origin === 'CALIFORNIA') & (d.destination === 'ARIZONA')) |
+        ((d.origin === 'COLORADO') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'CONNECTICUT') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'CONNECTICUT') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'DELAWARE') & (d.destination === 'MARYLAND')) |
+        ((d.origin === 'FLORIDA') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'GEORGIA') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'IDAHO') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'ILLINOIS') & (d.destination === 'MISSOURI')) |
+        ((d.origin === 'INDIANA') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'IOWA') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'KANSAS') & (d.destination === 'MISSOURI')) |
+        ((d.origin === 'KENTUCKY') & (d.destination === 'OHIO')) |
+        ((d.origin === 'LOUISIANA') & (d.destination === 'TEXAS')) |
+        ((d.origin === 'MAINE') & (d.destination === 'MASSACHUSETTS')) |
+        ((d.origin === 'MICHIGAN') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'MINNESOTA') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'MISSISSIPPI') & (d.destination === 'TENNESSEE')) |
+        ((d.origin === 'MISSOURI') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'MONTANA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'NEVADA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'NEW HAMPSHIRE') & (d.destination === 'MASSACHUSETTS')) |
+        ((d.origin === 'NEW JERSEY') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'NEW MEXICO') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'NEW YORK') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'NORTH CAROLINA') & (d.destination === 'SOUTH CAROLINA')) |
+        ((d.origin === 'OHIO') & (d.destination === 'MICHIGAN')) |
+        ((d.origin === 'OKLAHOMA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'OREGON') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'PENNSYLVANIA') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'SOUTH CAROLINA') & (d.destination === 'NORTH CAROLINA')) |
+        ((d.origin === 'TENNESSEE') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'TEXAS') & (d.destination === 'LOUISIANA')) |
+        ((d.origin === 'UTAH') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'VERMONT') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'VIRGINIA') & (d.destination === 'MARYLAND')) |
+        ((d.origin === 'WASHINGTON') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'WEST VIRGINIA') & (d.destination === 'MARYLAND')) |
+        ((d.origin === 'WISCONSIN') & (d.destination === 'ILLINOIS'))
+        ? '3px'
+        : '1px';
     });
+  // .attr('stroke-width', d => {
+  //   // console.log(d.origin === 'ALASKA');
+  //   return (d.origin === 'CALIFORNIA') & (d.destination === 'NEW JERSEY') ? '3px' : '1px';
+  // });
+  // .attr('fill', 'none')
+  // .attr('class', d => `.trip-arc-${d.origin}-group`);
 }
-
-// take all the lines and make sure i seperately assign lines for each starting point
-// figure out nested selections
