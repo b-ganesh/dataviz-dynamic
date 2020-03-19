@@ -4,10 +4,11 @@
 //   // this is just one example of how to import data. there are lots of ways to do it!
 
 import * as d3 from 'd3';
-import chloro_map from './map';
+import chloro_map_interactive from './map';
 import scrollama from 'scrollama';
 import './stylesheets/main.css';
 import setupviz from './setupviz';
+import chloro_map_static from './map_static';
 
 // var main = d3.select("main");
 var scrolly = d3.select('#scrolly');
@@ -53,7 +54,10 @@ function handleStepEnter(response) {
   // figure.select("p").text(response.index + 1);
   if (response.index === 0) {
     // console.log(myd1);
-    chloro_map(myd1, myd2);
+    chloro_map_static(myd1);
+  }
+  if (response.index == 1) {
+    chloro_map_interactive(myd1, myd2);
   }
   handleResize();
 }
@@ -93,7 +97,6 @@ Promise.all(
   .then(result => {
     const [data1, data2] = result;
     myd1 = data1;
-    // AM: this is just a more general version of your processed data on the other page
     myd2 = [...new Array(Object.keys(data2.origin).length)].map((_, idx) => {
       return Object.keys(data2).reduce((acc, key) => {
         acc[key] = data2[key][idx];

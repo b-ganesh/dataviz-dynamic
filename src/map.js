@@ -1,4 +1,8 @@
 import * as d3 from 'd3';
+import legend from 'd3-svg-legend';
+d3.legend = legend;
+d3.legendColor = legend.legendColor;
+d3.legendHelpers = legend.legendHelpers;
 
 function groupBy(data, accessor) {
   return data.reduce((acc, row) => {
@@ -8,14 +12,20 @@ function groupBy(data, accessor) {
   }, {});
 }
 
-export default function chloro_map(data1, data2, error) {
+export default function chloro_map_interactive(data1, data2, error) {
   if (error) throw error;
 
   const height = 600;
   const width = 1070;
-  const margin = {top: 200, left: 200, right: 200, bottom: 200};
+  const margin = {top: 90, left: 10, right: 10, bottom: 10};
 
-  var svg = d3.select('#mymap').select('svg');
+  var svg = d3
+    .select('#mymap')
+    .select('svg')
+    .attr('height', height)
+    .attr('width', width)
+    .append('g')
+    .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
   var projection = d3.geoAlbersUsa();
 
@@ -40,13 +50,15 @@ export default function chloro_map(data1, data2, error) {
   svg
     .append('text')
     .text('Tracking Gun Trafficking in America')
-    .attr('transform', `translate(${margin.left}, ${18})`)
+    .attr('transform', `translate(${width / 2.2}, ${-60})`)
+    .attr('text-anchor', 'middle')
     .attr('font-weight', 'bolder')
-    .attr('font-size', 25);
+    .attr('font-size', 30);
   svg
     .append('text')
     .text('Movement of guns across the U.S., 2015')
-    .attr('transform', `translate(${margin.top}, ${40})`)
+    .attr('transform', `translate(${width / 2.2}, ${-30})`)
+    .attr('text-anchor', 'middle')
     .attr('font-weight', 'bold')
     .attr('font-size', 14);
   svg
@@ -55,19 +67,18 @@ export default function chloro_map(data1, data2, error) {
     .attr('transform', `translate(${margin.bottom}, ${600})`)
     .attr('font-size', 12);
 
-  var svg = d3.select('svg');
+  // var svg = d3.select('svg');
 
   svg
     .append('g')
     .attr('class', 'legendQuant')
-    .attr('transform', 'translate(20,20)');
+    .attr('transform', 'translate(800,350)');
 
   var legend = d3
     .legendColor()
     .labelFormat(d3.format('.2f'))
     .labels(d3.legendHelpers.thresholdLabels)
-    .useClass(true)
-    .scale(thresholdScale);
+    .scale(color);
 
   svg.select('.legendQuant').call(legend);
 
@@ -231,6 +242,7 @@ export default function chloro_map(data1, data2, error) {
         ? '3px'
         : '1px';
     });
+
   // .attr('stroke-width', d => {
   //   // console.log(d.origin === 'ALASKA');
   //   return (d.origin === 'CALIFORNIA') & (d.destination === 'NEW JERSEY') ? '3px' : '1px';
