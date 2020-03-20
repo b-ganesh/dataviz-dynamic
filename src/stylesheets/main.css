@@ -87,9 +87,25 @@ figure p {
 
 .trip:hover .trip-arc {
   stroke-opacity: 0.5;
+  /* stroke: coral; */
 }
 
 .trip:hover .state-shape {
+  stroke: black;
+  stroke-width: 4px;
+}
+/* 
+.trip:hover .TEXAS-group {
+  fill: blue;
+} */
+
+.allow-interactivity .trip:hover .trip-arc,
+.trip.selected .trip-arc {
+  stroke-opacity: 0.5;
+  stroke: coral;
+}
+.allow-interactivity .trip:hover .state-shape,
+.trip.selected .state-shape {
   stroke: black;
   stroke-width: 4px;
 }

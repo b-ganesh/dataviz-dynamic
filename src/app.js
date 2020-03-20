@@ -42,7 +42,24 @@ function handleResize() {
 
 // scrollama event handlers
 function handleStepEnter(response) {
+  // remove all of the old lines
+  d3.selectAll('.trip').classed('selected', false);
+  // check if interacitivity is allow
+  console.log(response.index, 3);
+  d3.select('#mymap').classed('allow-interactivity', response.index === 3);
+  // highlight particular layers
+  if (response.index === 0) {
+    d3.selectAll('.trip').classed('selected', false);
+  }
+  if (response.index === 1) {
+    d3.select('.ILLINOIS-group').classed('selected', true);
+  }
+  if (response.index === 2) {
+    d3.select('.WASHINGTON-group').classed('selected', true);
+  }
+
   console.log(response);
+
   // response = { element, direction, index }
 
   // add color to current step only
@@ -54,9 +71,15 @@ function handleStepEnter(response) {
   // figure.select("p").text(response.index + 1);
   if (response.index === 0) {
     // console.log(myd1);
-    chloro_map_static(myd1);
+    chloro_map_interactive(myd1, myd2);
   }
   if (response.index == 1) {
+    chloro_map_interactive(myd1, myd2);
+  }
+  if (response.index == 2) {
+    chloro_map_interactive(myd1, myd2);
+  }
+  if (response.index == 3) {
     chloro_map_interactive(myd1, myd2);
   }
   handleResize();
