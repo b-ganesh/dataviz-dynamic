@@ -2,8 +2,8 @@ a {
   cursor: pointer;
   color: #222;
   text-decoration: none;
-  margin-left: 30px;
-  font-size: 20px;
+  margin-left: 35px;
+  font-size: 18px;
 }
 
 html,
@@ -81,7 +81,7 @@ figure p {
 .step p {
   text-align: center;
   padding: 1rem;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 .trip-arc {

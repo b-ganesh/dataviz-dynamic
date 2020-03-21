@@ -15,8 +15,8 @@ function groupBy(data, accessor) {
 export default function chloro_map_interactive(data1, data2, error) {
   if (error) throw error;
 
-  const height = 600;
-  const width = 1070;
+  const height = 590;
+  const width = 1050;
   const margin = {top: 90, left: 10, right: 10, bottom: 10};
 
   var svg = d3
@@ -70,7 +70,7 @@ export default function chloro_map_interactive(data1, data2, error) {
   svg
     .append('g')
     .attr('class', 'legendQuant')
-    .attr('transform', 'translate(790,350)');
+    .attr('transform', 'translate(780,340)');
 
   var legend = d3
     .legendColor()
