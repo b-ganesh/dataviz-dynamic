@@ -64,12 +64,7 @@ function handleStepEnter(response) {
   });
 
   // update graphic based on step
-  // figure.select("p").text(response.index + 1);
-  // d3.selectAll('#mymap').remove();
   if (response.index === 0) {
-    // d3.selectAll('#mymap svg > g').remove();
-    // console.log(myd1);
-    // d3.selectAll('#mymap').remove();
     chloro_map_interactive(myd1, myd2);
   }
   if (response.index == 1) {
@@ -132,7 +127,6 @@ Promise.all(
         return acc;
       }, {});
     });
-    console.log(myd2);
     init();
     setupviz();
   })

@@ -63,18 +63,9 @@ export default function chloro_map_interactive(data1, data2, error) {
     .attr('font-size', 14);
   svg
     .append('text')
-    .text(
-      'Data source: FBI NICS Data. Note: Solid line indicates top state to receive guns from origin state.',
-      'More than one solid line indicates a tie.',
-    )
-    // .text('More than one solid line indicates a tie.')
-    .attr('transform', `translate(${width / 4.3}, ${-10})`)
+    .text('Data source: US Firearms Trace Data and Firearms Provisions in the U.S.')
+    .attr('transform', `translate(${width / 3.7}, ${-7})`)
     .attr('font-size', 12);
-  // svg
-  //   .append('text')
-  //   .text('Note: solid lines indicate highest gun outflow')
-  //   .attr('transform', `translate(${width / 3.0}, ${5})`)
-  //   .attr('font-size', 12);
 
   svg
     .append('g')
@@ -242,11 +233,4 @@ export default function chloro_map_interactive(data1, data2, error) {
         ? '0.0'
         : '6.0';
     });
-
-  // .attr('stroke-width', d => {
-  //   // console.log(d.origin === 'ALASKA');
-  //   return (d.origin === 'CALIFORNIA') & (d.destination === 'NEW JERSEY') ? '3px' : '1px';
-  // });
-  // .attr('fill', 'none')
-  // .attr('class', d => `.trip-arc-${d.origin}-group`);
 }
