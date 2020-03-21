@@ -1,15 +1,9 @@
-// const domReady = require('domready');
-
-// domReady(() => {
-//   // this is just one example of how to import data. there are lots of ways to do it!
-
 import * as d3 from 'd3';
 import chloro_map_interactive from './map';
 import scrollama from 'scrollama';
 import './stylesheets/main.css';
 import setupviz from './setupviz';
 
-// var main = d3.select("main");
 var scrolly = d3.select('#scrolly');
 var figure = scrolly.select('figure');
 var article = scrolly.select('article');
@@ -41,8 +35,8 @@ function handleStepEnter(response) {
   // remove all of the old lines
   d3.selectAll('.trip').classed('selected', false);
   // check if interacitivity is allow
-  console.log(response.index, 4);
-  d3.select('#mymap').classed('allow-interactivity', response.index === 4);
+  // console.log(response.index, 4);
+  d3.select('#mymap').classed('allow-interactivity', response.index === 3);
   // highlight particular layers
   if (response.index === 0) {
     d3.selectAll('.trip').classed('selected', false);
@@ -53,11 +47,6 @@ function handleStepEnter(response) {
   if (response.index === 2) {
     d3.select('.INDIANA-group').classed('selected', true);
   }
-
-  console.log(response);
-
-  // response = { element, direction, index }
-
   // add color to current step only
   step.classed('is-active', function(d, i) {
     return i === response.index;
@@ -66,23 +55,21 @@ function handleStepEnter(response) {
   // update graphic based on step
   if (response.index === 0) {
     chloro_map_interactive(myd1, myd2);
+    d3.selectAll('#mymap svg > g:not(:first-child)').remove();
   }
-  if (response.index == 1) {
+  if (response.index === 1) {
     chloro_map_interactive(myd1, myd2);
     d3.selectAll('#mymap svg > g:not(:first-child)').remove();
   }
-  if (response.index == 2) {
+  if (response.index === 2) {
     chloro_map_interactive(myd1, myd2);
     d3.selectAll('#mymap svg > g:not(:first-child)').remove();
   }
-  if (response.index == 3) {
+  if (response.index === 3) {
     chloro_map_interactive(myd1, myd2);
     d3.selectAll('#mymap svg > g:not(:first-child)').remove();
   }
-  if (response.index == 4) {
-    chloro_map_interactive(myd1, myd2);
-    d3.selectAll('#mymap svg > g:not(:first-child)').remove();
-  }
+
   handleResize();
 }
 
