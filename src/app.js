@@ -15,11 +15,8 @@ var scrolly = d3.select('#scrolly');
 var figure = scrolly.select('figure');
 var article = scrolly.select('article');
 var step = article.selectAll('.step');
-// AM: this type of variable hoising to global is a bad practice, just pass variables where they are needed
 var myd1;
 var myd2;
-// var myd;
-
 // initialize the scrollama
 var scroller = scrollama();
 
@@ -52,10 +49,10 @@ function handleStepEnter(response) {
     d3.selectAll('.trip').classed('selected', false);
   }
   if (response.index === 1) {
-    d3.select('.ILLINOIS-group').classed('selected', true);
+    d3.select('.ARIZONA-group').classed('selected', true);
   }
   if (response.index === 2) {
-    d3.select('.WASHINGTON-group').classed('selected', true);
+    d3.select('.INDIANA-group').classed('selected', true);
   }
 
   console.log(response);
@@ -69,18 +66,24 @@ function handleStepEnter(response) {
 
   // update graphic based on step
   // figure.select("p").text(response.index + 1);
+  // d3.selectAll('#mymap').remove();
   if (response.index === 0) {
+    // d3.selectAll('#mymap svg > g').remove();
     // console.log(myd1);
+    // d3.selectAll('#mymap').remove();
     chloro_map_interactive(myd1, myd2);
   }
   if (response.index == 1) {
     chloro_map_interactive(myd1, myd2);
+    d3.selectAll('#mymap svg > g:not(:first-child)').remove();
   }
   if (response.index == 2) {
     chloro_map_interactive(myd1, myd2);
+    d3.selectAll('#mymap svg > g:not(:first-child)').remove();
   }
   if (response.index == 3) {
     chloro_map_interactive(myd1, myd2);
+    d3.selectAll('#mymap svg > g:not(:first-child)').remove();
   }
   handleResize();
 }

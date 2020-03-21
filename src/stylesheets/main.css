@@ -5,7 +5,7 @@ a {
 html,
 body {
   background: #d6d6ce;
-  font-family: Verdana, Geneva, sans-serif;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -70,7 +70,7 @@ figure p {
 }
 
 .step.is-active {
-  background-color: goldenrod;
+  background-color: coral;
   color: #3b3b3b;
 }
 
@@ -103,9 +103,4 @@ figure p {
 .trip.selected .trip-arc {
   stroke-opacity: 0.5;
   stroke: coral;
-}
-.allow-interactivity .trip:hover .state-shape,
-.trip.selected .state-shape {
-  stroke: black;
-  stroke-width: 4px;
 }

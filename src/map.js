@@ -63,38 +63,34 @@ export default function chloro_map_interactive(data1, data2, error) {
     .attr('font-size', 14);
   svg
     .append('text')
-    .text('Data source: FBI NICS Data')
-    .attr('transform', `translate(${margin.bottom}, ${600})`)
+    .text(
+      'Data source: FBI NICS Data. Note: Solid line indicates top state to receive guns from origin state.',
+      'More than one solid line indicates a tie.',
+    )
+    // .text('More than one solid line indicates a tie.')
+    .attr('transform', `translate(${width / 4.3}, ${-10})`)
     .attr('font-size', 12);
-
-  // var svg = d3.select('svg');
+  // svg
+  //   .append('text')
+  //   .text('Note: solid lines indicate highest gun outflow')
+  //   .attr('transform', `translate(${width / 3.0}, ${5})`)
+  //   .attr('font-size', 12);
 
   svg
     .append('g')
     .attr('class', 'legendQuant')
-    .attr('transform', 'translate(800,350)');
+    .attr('transform', 'translate(790,350)');
 
   var legend = d3
     .legendColor()
     .labelFormat(d3.format('.2f'))
     .labels(d3.legendHelpers.thresholdLabels)
+    .title('Number of Gun Laws')
+    .titleWidth(180)
     .scale(color);
 
   svg.select('.legendQuant').call(legend);
 
-  // svg
-  //   .selectAll("circle")
-  //   .data(data1.features)
-  //   .enter()
-  //   .append("circle")
-  //   .attr("r", 5)
-  //   .attr("transform", function(d) {
-  //     return (
-  //       "translate(" +
-  //       projection([d.properties["long"], d.properties["lat"]]) +
-  //       ")"
-  //     );
-  //   });
   const grouped = Object.values(groupBy(data2, d => d.origin));
   const statePositions = grouped.reduce((acc, row) => {
     row.forEach(d => {
@@ -115,8 +111,7 @@ export default function chloro_map_interactive(data1, data2, error) {
     .data(grouped)
     .enter()
     .append('g')
-    .attr('class', d => `trip ${d[0].origin.replace(/\s/g, '_')}-group`); // this is a regex that turns stuff like DISTRICT OF COLUMBIA into DISTRICT_OF_COLUMBIA-group
-  // .attr('class', 'trip');
+    .attr('class', d => `trip ${d[0].origin.replace(/\s/g, '_')}-group`);
   // hover targets
   trip
     .selectAll('path')
@@ -124,7 +119,6 @@ export default function chloro_map_interactive(data1, data2, error) {
     .enter()
     .append('path')
     .attr('stroke', 'black')
-    // .attr('fill', d => 'red')
     .attr('fill-opacity', 0)
     .attr('class', 'state-shape')
     .attr('d', path);
@@ -144,105 +138,110 @@ export default function chloro_map_interactive(data1, data2, error) {
         ],
       };
       return path(geoLine);
+    })
+    .attr('stroke-width', d => {
+      return ((d.origin === 'ALABAMA') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'ALABAMA') & (d.destination === 'GEORGIA')) |
+        ((d.origin === 'ARIZONA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'ARKANSAS') & (d.destination === 'TENNESSEE')) |
+        ((d.origin === 'CALIFORNIA') & (d.destination === 'ARIZONA')) |
+        ((d.origin === 'COLORADO') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'CONNECTICUT') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'CONNECTICUT') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'DELAWARE') & (d.destination === 'MARYLAND')) |
+        ((d.origin === 'FLORIDA') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'GEORGIA') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'IDAHO') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'ILLINOIS') & (d.destination === 'MISSOURI')) |
+        ((d.origin === 'INDIANA') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'IOWA') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'KANSAS') & (d.destination === 'MISSOURI')) |
+        ((d.origin === 'KENTUCKY') & (d.destination === 'OHIO')) |
+        ((d.origin === 'LOUISIANA') & (d.destination === 'TEXAS')) |
+        ((d.origin === 'MAINE') & (d.destination === 'MASSACHUSETTS')) |
+        ((d.origin === 'MICHIGAN') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'MINNESOTA') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'MISSISSIPPI') & (d.destination === 'TENNESSEE')) |
+        ((d.origin === 'MISSOURI') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'MONTANA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'NEBRASKA') & (d.destination === 'IOWA')) |
+        ((d.origin === 'NEVADA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'NEW HAMPSHIRE') & (d.destination === 'MASSACHUSETTS')) |
+        ((d.origin === 'NEW JERSEY') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'NEW MEXICO') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'NEW YORK') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'NORTH CAROLINA') & (d.destination === 'SOUTH CAROLINA')) |
+        ((d.origin === 'NORTH DAKOTA') & (d.destination === 'MINNESOTA')) |
+        ((d.origin === 'OHIO') & (d.destination === 'MICHIGAN')) |
+        ((d.origin === 'OKLAHOMA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'OREGON') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'PENNSYLVANIA') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'SOUTH CAROLINA') & (d.destination === 'NORTH CAROLINA')) |
+        ((d.origin === 'SOUTH DAKOTA') & (d.destination === 'NEBRASKA')) |
+        ((d.origin === 'TENNESSEE') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'TEXAS') & (d.destination === 'LOUISIANA')) |
+        ((d.origin === 'UTAH') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'VERMONT') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'VIRGINIA') & (d.destination === 'MARYLAND')) |
+        ((d.origin === 'WASHINGTON') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'WEST VIRGINIA') & (d.destination === 'MARYLAND')) |
+        ((d.origin === 'WISCONSIN') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'WYOMING') & (d.destination === 'COLORADO'))
+        ? '3px'
+        : '1px';
+    })
+
+    .attr('stroke-dasharray', d => {
+      return ((d.origin === 'ALABAMA') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'ALABAMA') & (d.destination === 'GEORGIA')) |
+        ((d.origin === 'ARIZONA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'ARKANSAS') & (d.destination === 'TENNESSEE')) |
+        ((d.origin === 'CALIFORNIA') & (d.destination === 'ARIZONA')) |
+        ((d.origin === 'COLORADO') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'CONNECTICUT') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'CONNECTICUT') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'DELAWARE') & (d.destination === 'MARYLAND')) |
+        ((d.origin === 'FLORIDA') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'GEORGIA') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'IDAHO') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'ILLINOIS') & (d.destination === 'MISSOURI')) |
+        ((d.origin === 'INDIANA') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'IOWA') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'KANSAS') & (d.destination === 'MISSOURI')) |
+        ((d.origin === 'KENTUCKY') & (d.destination === 'OHIO')) |
+        ((d.origin === 'LOUISIANA') & (d.destination === 'TEXAS')) |
+        ((d.origin === 'MAINE') & (d.destination === 'MASSACHUSETTS')) |
+        ((d.origin === 'MICHIGAN') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'MINNESOTA') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'MISSISSIPPI') & (d.destination === 'TENNESSEE')) |
+        ((d.origin === 'MISSOURI') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'MONTANA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'NEBRASKA') & (d.destination === 'IOWA')) |
+        ((d.origin === 'NEVADA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'NEW HAMPSHIRE') & (d.destination === 'MASSACHUSETTS')) |
+        ((d.origin === 'NEW JERSEY') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'NEW MEXICO') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'NEW YORK') & (d.destination === 'FLORIDA')) |
+        ((d.origin === 'NORTH CAROLINA') & (d.destination === 'SOUTH CAROLINA')) |
+        ((d.origin === 'NORTH DAKOTA') & (d.destination === 'MINNESOTA')) |
+        ((d.origin === 'OHIO') & (d.destination === 'MICHIGAN')) |
+        ((d.origin === 'OKLAHOMA') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'OREGON') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'PENNSYLVANIA') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'SOUTH CAROLINA') & (d.destination === 'NORTH CAROLINA')) |
+        ((d.origin === 'SOUTH DAKOTA') & (d.destination === 'NEBRASKA')) |
+        ((d.origin === 'TENNESSEE') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'TEXAS') & (d.destination === 'LOUISIANA')) |
+        ((d.origin === 'UTAH') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'VERMONT') & (d.destination === 'NEW YORK')) |
+        ((d.origin === 'VIRGINIA') & (d.destination === 'MARYLAND')) |
+        ((d.origin === 'WASHINGTON') & (d.destination === 'CALIFORNIA')) |
+        ((d.origin === 'WEST VIRGINIA') & (d.destination === 'MARYLAND')) |
+        ((d.origin === 'WISCONSIN') & (d.destination === 'ILLINOIS')) |
+        ((d.origin === 'WYOMING') & (d.destination === 'COLORADO'))
+        ? '0.0'
+        : '6.0';
     });
-  // .attr('stroke', d => {
-  //   // console.log(d.origin === 'ALASKA');
-  //   return ((d.origin === 'ALABAMA') & (d.destination === 'FLORIDA')) |
-  //     ((d.origin === 'ALABAMA') & (d.destination === 'GEORGIA')) |
-  //     ((d.origin === 'ALASKA') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'ARIZONA') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'ARKANSAS') & (d.destination === 'TENNESSEE')) |
-  //     ((d.origin === 'CALIFORNIA') & (d.destination === 'ARIZONA')) |
-  //     ((d.origin === 'COLORADO') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'CONNECTICUT') & (d.destination === 'FLORIDA')) |
-  //     ((d.origin === 'CONNECTICUT') & (d.destination === 'NEW YORK')) |
-  //     ((d.origin === 'DELAWARE') & (d.destination === 'MARYLAND')) |
-  //     ((d.origin === 'FLORIDA') & (d.destination === 'NEW YORK')) |
-  //     ((d.origin === 'GEORGIA') & (d.destination === 'NEW YORK')) |
-  //     ((d.origin === 'IDAHO') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'ILLINOIS') & (d.destination === 'MISSOURI')) |
-  //     ((d.origin === 'INDIANA') & (d.destination === 'ILLINOIS')) |
-  //     ((d.origin === 'IOWA') & (d.destination === 'ILLINOIS')) |
-  //     ((d.origin === 'KANSAS') & (d.destination === 'MISSOURI')) |
-  //     ((d.origin === 'KENTUCKY') & (d.destination === 'OHIO')) |
-  //     ((d.origin === 'LOUISIANA') & (d.destination === 'TEXAS')) |
-  //     ((d.origin === 'MAINE') & (d.destination === 'MASSACHUSETTS')) |
-  //     ((d.origin === 'MICHIGAN') & (d.destination === 'ILLINOIS')) |
-  //     ((d.origin === 'MINNESOTA') & (d.destination === 'ILLINOIS')) |
-  //     ((d.origin === 'MISSISSIPPI') & (d.destination === 'TENNESSEE')) |
-  //     ((d.origin === 'MISSOURI') & (d.destination === 'ILLINOIS')) |
-  //     ((d.origin === 'MONTANA') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'NEVADA') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'NEW HAMPSHIRE') & (d.destination === 'MASSACHUSETTS')) |
-  //     ((d.origin === 'NEW JERSEY') & (d.destination === 'FLORIDA')) |
-  //     ((d.origin === 'NEW MEXICO') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'NEW YORK') & (d.destination === 'FLORIDA')) |
-  //     ((d.origin === 'NORTH CAROLINA') & (d.destination === 'SOUTH CAROLINA')) |
-  //     ((d.origin === 'OHIO') & (d.destination === 'MICHIGAN')) |
-  //     ((d.origin === 'OKLAHOMA') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'OREGON') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'PENNSYLVANIA') & (d.destination === 'NEW YORK')) |
-  //     ((d.origin === 'SOUTH CAROLINA') & (d.destination === 'NORTH CAROLINA')) |
-  //     ((d.origin === 'TENNESSEE') & (d.destination === 'ILLINOIS')) |
-  //     ((d.origin === 'TEXAS') & (d.destination === 'LOUISIANA')) |
-  //     ((d.origin === 'UTAH') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'VERMONT') & (d.destination === 'NEW YORK')) |
-  //     ((d.origin === 'VIRGINIA') & (d.destination === 'MARYLAND')) |
-  //     ((d.origin === 'WASHINGTON') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'WEST VIRGINIA') & (d.destination === 'MARYLAND')) |
-  //     ((d.origin === 'WISCONSIN') & (d.destination === 'ILLINOIS'))
-  //     ? 'red'
-  //     : 'gray';
-  // })
-  // .attr('stroke-width', d => {
-  //   // console.log(d.origin === 'ALASKA');
-  //   return ((d.origin === 'ALABAMA') & (d.destination === 'FLORIDA')) |
-  //     ((d.origin === 'ALABAMA') & (d.destination === 'GEORGIA')) |
-  //     ((d.origin === 'ALASKA') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'ARIZONA') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'ARKANSAS') & (d.destination === 'TENNESSEE')) |
-  //     ((d.origin === 'CALIFORNIA') & (d.destination === 'ARIZONA')) |
-  //     ((d.origin === 'COLORADO') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'CONNECTICUT') & (d.destination === 'FLORIDA')) |
-  //     ((d.origin === 'CONNECTICUT') & (d.destination === 'NEW YORK')) |
-  //     ((d.origin === 'DELAWARE') & (d.destination === 'MARYLAND')) |
-  //     ((d.origin === 'FLORIDA') & (d.destination === 'NEW YORK')) |
-  //     ((d.origin === 'GEORGIA') & (d.destination === 'NEW YORK')) |
-  //     ((d.origin === 'IDAHO') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'ILLINOIS') & (d.destination === 'MISSOURI')) |
-  //     ((d.origin === 'INDIANA') & (d.destination === 'ILLINOIS')) |
-  //     ((d.origin === 'IOWA') & (d.destination === 'ILLINOIS')) |
-  //     ((d.origin === 'KANSAS') & (d.destination === 'MISSOURI')) |
-  //     ((d.origin === 'KENTUCKY') & (d.destination === 'OHIO')) |
-  //     ((d.origin === 'LOUISIANA') & (d.destination === 'TEXAS')) |
-  //     ((d.origin === 'MAINE') & (d.destination === 'MASSACHUSETTS')) |
-  //     ((d.origin === 'MICHIGAN') & (d.destination === 'ILLINOIS')) |
-  //     ((d.origin === 'MINNESOTA') & (d.destination === 'ILLINOIS')) |
-  //     ((d.origin === 'MISSISSIPPI') & (d.destination === 'TENNESSEE')) |
-  //     ((d.origin === 'MISSOURI') & (d.destination === 'ILLINOIS')) |
-  //     ((d.origin === 'MONTANA') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'NEVADA') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'NEW HAMPSHIRE') & (d.destination === 'MASSACHUSETTS')) |
-  //     ((d.origin === 'NEW JERSEY') & (d.destination === 'FLORIDA')) |
-  //     ((d.origin === 'NEW MEXICO') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'NEW YORK') & (d.destination === 'FLORIDA')) |
-  //     ((d.origin === 'NORTH CAROLINA') & (d.destination === 'SOUTH CAROLINA')) |
-  //     ((d.origin === 'OHIO') & (d.destination === 'MICHIGAN')) |
-  //     ((d.origin === 'OKLAHOMA') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'OREGON') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'PENNSYLVANIA') & (d.destination === 'NEW YORK')) |
-  //     ((d.origin === 'SOUTH CAROLINA') & (d.destination === 'NORTH CAROLINA')) |
-  //     ((d.origin === 'TENNESSEE') & (d.destination === 'ILLINOIS')) |
-  //     ((d.origin === 'TEXAS') & (d.destination === 'LOUISIANA')) |
-  //     ((d.origin === 'UTAH') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'VERMONT') & (d.destination === 'NEW YORK')) |
-  //     ((d.origin === 'VIRGINIA') & (d.destination === 'MARYLAND')) |
-  //     ((d.origin === 'WASHINGTON') & (d.destination === 'CALIFORNIA')) |
-  //     ((d.origin === 'WEST VIRGINIA') & (d.destination === 'MARYLAND')) |
-  //     ((d.origin === 'WISCONSIN') & (d.destination === 'ILLINOIS'))
-  //     ? '3px'
-  //     : '1px';
-  // });
 
   // .attr('stroke-width', d => {
   //   // console.log(d.origin === 'ALASKA');
