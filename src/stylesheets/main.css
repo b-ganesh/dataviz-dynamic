@@ -1,5 +1,8 @@
 a {
   cursor: pointer;
+  color: #222;
+  text-decoration: none;
+  margin-left: 5px;
 }
 
 html,

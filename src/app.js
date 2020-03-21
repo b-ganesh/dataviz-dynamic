@@ -8,7 +8,6 @@ import chloro_map_interactive from './map';
 import scrollama from 'scrollama';
 import './stylesheets/main.css';
 import setupviz from './setupviz';
-import chloro_map_static from './map_static';
 
 // var main = d3.select("main");
 var scrolly = d3.select('#scrolly');
@@ -42,8 +41,8 @@ function handleStepEnter(response) {
   // remove all of the old lines
   d3.selectAll('.trip').classed('selected', false);
   // check if interacitivity is allow
-  console.log(response.index, 3);
-  d3.select('#mymap').classed('allow-interactivity', response.index === 3);
+  console.log(response.index, 4);
+  d3.select('#mymap').classed('allow-interactivity', response.index === 4);
   // highlight particular layers
   if (response.index === 0) {
     d3.selectAll('.trip').classed('selected', false);
@@ -82,6 +81,10 @@ function handleStepEnter(response) {
     d3.selectAll('#mymap svg > g:not(:first-child)').remove();
   }
   if (response.index == 3) {
+    chloro_map_interactive(myd1, myd2);
+    d3.selectAll('#mymap svg > g:not(:first-child)').remove();
+  }
+  if (response.index == 4) {
     chloro_map_interactive(myd1, myd2);
     d3.selectAll('#mymap svg > g:not(:first-child)').remove();
   }
